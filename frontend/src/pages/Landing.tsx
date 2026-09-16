@@ -1,0 +1,14 @@
+import { useState } from 'react';
+import { Logo } from '../components/Logo';
+import { AuthModal } from '../components/AuthModal';
+import { Icon } from '../components/Icon';
+import type { AuthResponse } from '../types';
+
+export function Landing({ onAuth }: { onAuth: (a: AuthResponse) => void }) {
+  const [modal, setModal] = useState<null | 'login' | 'signup'>(null);
+  return <div className="landing-clean">
+    <header className="landing-header"><Logo /><div className="landing-header-actions"><button className="landing-login" onClick={() => setModal('login')}>Login</button><button className="landing-create" onClick={() => setModal('signup')}>Create account <Icon name="arrow" size={17} /></button></div></header>
+    <main className="landing-main"><section className="landing-copy"><span className="landing-kicker"><i />WAVE USER & ROLE MANAGEMENT</span><h1>Manage people.<br /><em>Manage access.</em></h1><p>Wave gives your team one clear place to manage users, administrators and business roles.</p><div className="landing-actions"><button className="landing-create large" onClick={() => setModal('signup')}>Create account <Icon name="arrow" size={18} /></button><button className="landing-login outline" onClick={() => setModal('login')}>Sign in</button></div><div className="landing-points"><div><span><Icon name="users" size={19} /></span><div><strong>Users</strong><small>Create and manage accounts.</small></div></div><div><span><Icon name="role" size={19} /></span><div><strong>Roles</strong><small>Create business roles and assign access.</small></div></div><div><span><Icon name="shield" size={19} /></span><div><strong>Administration</strong><small>Keep account management organized.</small></div></div></div></section><section className="landing-visual"><div className="visual-glow" /><div className="visual-panel"><div className="visual-panel-head"><div><small>WAVE WORKSPACE</small><strong>People & access</strong></div><span><i />Live</span></div><div className="visual-stat-row"><div><span>Users</span><strong>Manage</strong></div><div><span>Roles</span><strong>Assign</strong></div></div><div className="visual-list"><div><span className="visual-avatar">U</span><div><strong>User accounts</strong><small>View · Add · Edit · Delete</small></div><Icon name="arrow" size={17} /></div><div><span className="visual-avatar cyan">R</span><div><strong>Business roles</strong><small>Create · Edit · Assign</small></div><Icon name="arrow" size={17} /></div><div><span className="visual-avatar violet">A</span><div><strong>Administrators</strong><small>Super Admin managed</small></div><Icon name="arrow" size={17} /></div></div></div></section></main><footer className="landing-footer"><span>Wave</span><span>FastAPI · PostgreSQL · React</span></footer>
+    {modal && <AuthModal mode={modal} onClose={() => setModal(null)} onAuth={(auth) => { setModal(null); onAuth(auth); }} />}
+  </div>;
+}

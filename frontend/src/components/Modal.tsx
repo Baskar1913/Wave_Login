@@ -1,0 +1,2 @@
+import {ReactNode} from 'react';import {Icon} from './Icon';
+export function Modal({title,subtitle,onClose,children}:{title:string;subtitle?:string;onClose:()=>void;children:ReactNode}){return <div className="modal-backdrop" onMouseDown={e=>{if(e.currentTarget===e.target)onClose()}}><div className="modal"><button className="icon-btn modal-close" onClick={onClose}><Icon name="x"/></button><div className="modal-head"><div className="eyebrow">WAVE</div><h2>{title}</h2>{subtitle&&<p>{subtitle}</p>}</div>{children}</div></div>}
