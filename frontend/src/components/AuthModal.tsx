@@ -39,6 +39,16 @@ export function AuthModal({
     }));
   };
 
+  // Fill the public demo Super Admin credentials
+  const fillSuperAdminCredentials = () => {
+    setForm((current) => ({
+      ...current,
+      username: 'superadmin@gmail.com',
+      password: 'Superadmin@123',
+    }));
+    setError('');
+  };
+
   const submit = async (event: FormEvent) => {
     event.preventDefault();
     setError('');
@@ -286,6 +296,43 @@ export function AuthModal({
               </button>
             </div>
           )}
+
+          {/* Super Admin demo credentials */}
+          {view === 'login' &&
+            loginAs === 'SUPER_ADMIN' && (
+              <div className="super-admin-demo">
+                <div className="super-admin-demo-title">
+                  <Icon name="shield" size={18} />
+                  <strong>
+                    Super Admin Demo Access
+                  </strong>
+                </div>
+
+                <div className="super-admin-demo-info">
+                  <div>
+                    <span>Email</span>
+                    <strong>
+                      superadmin@gmail.com
+                    </strong>
+                  </div>
+
+                  <div>
+                    <span>Password</span>
+                    <strong>
+                      Superadmin@123
+                    </strong>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  className="super-admin-use"
+                  onClick={fillSuperAdminCredentials}
+                >
+                  Use Demo Credentials
+                </button>
+              </div>
+            )}
 
           <form
             className="auth-form"
