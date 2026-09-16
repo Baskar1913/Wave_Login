@@ -1,6 +1,12 @@
 import type { AuthResponse, LoginAs, Role, User } from '../types';
 
-const API = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+// Production API runs on Render.
+// VITE_API_URL can override this value when configured in Vercel.
+const API = (
+  import.meta.env.VITE_API_URL ||
+  'https://wave-login.onrender.com'
+).replace(/\/$/, '');
+
 let token = localStorage.getItem('wave_token');
 
 export const setToken = (value: string | null) => {
@@ -55,7 +61,7 @@ async function request<T>(
     });
   } catch {
     throw new Error(
-      'Cannot reach Wave API. Start FastAPI on http://127.0.0.1:8000 and try again.',
+      'Cannot reach Wave API. Please check the deployed Wave backend.',
     );
   }
 
@@ -114,7 +120,7 @@ async function request<T>(
       (!detail || detail === 'Internal Server Error')
     ) {
       throw new Error(
-        'Wave server error (500). Check the FastAPI terminal for the database/API error.',
+        'Wave server error (500). Check the FastAPI backend logs.',
       );
     }
 
@@ -129,17 +135,6 @@ async function request<T>(
 export const api = {
   /*
    * LOGIN
-   *
-   * The third argument `true` tells request()
-   * that this is an authentication request.
-   *
-   * Therefore:
-   *
-   * 401 → Invalid username/email or password
-   *
-   * instead of:
-   *
-   * 401 → __SESSION_EXPIRED__
    */
   login: (body: {
     username_or_email: string;
@@ -155,6 +150,9 @@ export const api = {
       true,
     ),
 
+  /*
+   * SIGNUP
+   */
   signup: (body: object) =>
     request<AuthResponse>(
       '/api/v1/auth/signup',
@@ -165,9 +163,15 @@ export const api = {
       true,
     ),
 
+  /*
+   * CURRENT USER
+   */
   me: () =>
     request<User>('/api/v1/me'),
 
+  /*
+   * USERS
+   */
   users: () =>
     request<User[]>('/api/v1/users'),
 
@@ -197,6 +201,9 @@ export const api = {
       },
     ),
 
+  /*
+   * ROLE ASSIGNMENT
+   */
   assignRole: (id: number, role: string) =>
     request<User>(
       `/api/v1/users/${id}/roles?role_name=${encodeURIComponent(role)}`,
@@ -213,6 +220,9 @@ export const api = {
       },
     ),
 
+  /*
+   * ADMINS
+   */
   admins: () =>
     request<User[]>('/api/v1/admins'),
 
@@ -242,6 +252,9 @@ export const api = {
       },
     ),
 
+  /*
+   * ROLES
+   */
   roles: () =>
     request<Role[]>('/api/v1/roles'),
 
